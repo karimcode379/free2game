@@ -37,7 +37,7 @@ const Home = () => {
                     data={data}
                 />
                 <div className="showMore">
-                    <button>
+                    <button className="button">
                         <Link to="/recently" state={data}>SHOW MORE</Link>
                     </button>
                 </div>
@@ -48,7 +48,7 @@ const Home = () => {
                     data={data}
                 />
                 <div className="showMore">
-                    <button>
+                    <button className="button">
                         <Link to="/all" state={data}>SHOW MORE</Link>
                     </button>
                 </div>
@@ -57,7 +57,7 @@ const Home = () => {
                     data={data}
                 />
                 <div className="showMore">
-                    <button>
+                    <button className="button">
                         <Link to="/all" state={data}>SHOW MORE</Link>
                     </button>
                 </div>

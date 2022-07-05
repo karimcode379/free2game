@@ -50,7 +50,7 @@ p {
   font-size: 1.6rem;
 }
 
-button {
+.button {
   padding: 1.2rem 2.4rem;
   background-color: #FF4654;
   border: none;
@@ -71,7 +71,7 @@ button {
 }
 
 .mainWrapper {
-  padding: 0 5%;
+  padding: 0 5% 5vh 5%;
 }
 
 /* ================================ 
@@ -86,12 +86,14 @@ button {
   display: flex;
   position: fixed;
   height: 100%;
+  z-index: 5;
 
   .navBar {
     border-right: 2px solid #FFF;
     width: 74px;
     background-color: #040F14;
     transition: width .3s ease-out;
+
 
 
     .hamburger {
@@ -130,6 +132,7 @@ button {
   margin-top: 16px;
   transition: margin .3s ease-out;
   position: fixed;
+  z-index: 5;
 }
 
 /**** Active Button ****/
@@ -170,7 +173,7 @@ header {
   background: url('./img/Home_Header.png') center / cover no-repeat;
   height: 583px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
 
   h1 {
     padding: 0 0 5% 5%;
@@ -184,8 +187,13 @@ header {
 ================================ */
 .fourGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-  justify-items: space-around;
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+  transition: all 0.5s;
+  gap: 20px;
+}
+
+.fourGrid div {
+  transition: all 0.5s;
 }
 
 /* ================================ 
@@ -193,13 +201,10 @@ header {
 ================================ */
 .gameItem {
   background-color: #102130;
-  display: inline-block;
   border-radius: 24px;
-  width: 285px;
-  margin-bottom: 2vh;
 
   &>img {
-    height: 160px;
+    width: 100%;
     border-radius: 24px;
   }
 
@@ -271,7 +276,7 @@ header {
 ================================ */
 .showMore {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 3vh;
 }
 
@@ -281,8 +286,10 @@ header {
 
   .leftBigPicture {
     width: 40%;
-    margin-right: 3vh;
+    margin-right: 20px;
     background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     border-radius: 24px;
 
     .gameItem {
@@ -290,7 +297,7 @@ header {
       height: 100%;
       background-color: unset;
       display: flex;
-      align-items: end;
+      align-items: flex-end;
 
       &>img {
         display: none;
@@ -321,7 +328,7 @@ header {
 
     .gameItem {
       display: flex;
-      width: 100%;
+      margin-bottom: 20px;
 
       &>div {
         height: unset;
@@ -332,8 +339,8 @@ header {
         }
       }
 
-      &>img {
-        height: 100%;
+      &>div {
+        width: 40%;
       }
     }
 
@@ -341,4 +348,92 @@ header {
       margin-bottom: unset;
     }
   }
+}
+
+/* ================================ 
+            Filters
+================================ */
+
+.filters {
+  margin: 20px 0;
+  z-index: 4;
+
+
+  .filterButton {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    position: relative;
+
+    .filterTitle {
+      background-color: #FF4654;
+      border-radius: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 1.8rem;
+      padding: 1.2rem 2.4rem;
+      z-index: 4;
+
+      p {
+        font-size: 1.8rem;
+      }
+
+      div {
+        cursor: pointer;
+      }
+
+
+    }
+
+    .filterList {
+      position: absolute;
+      width: 100%;
+      top: 80%;
+      padding-top: 10px;
+      background-color: #102130;
+      padding: 10px;
+
+
+
+      div {
+        border-radius: 12px;
+        background-color: #385470;
+        font-family: Oswald;
+        margin: 10px 0;
+        padding: 1.5vh 10%;
+        cursor: pointer;
+        font-family: 'Oswald', sans-serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+      }
+
+      button {
+        text-align: left;
+        border-radius: 12px;
+        background-color: #385470;
+        font-family: Oswald;
+        margin: 10px 0;
+        padding: 1.5vh 10%;
+        cursor: pointer;
+        font-family: 'Oswald', sans-serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        color: #FFF;
+        border: none;
+        display: block;
+        width: 100%;
+      }
+
+
+
+    }
+  }
+
+}
+
+.scrollContainer {
+  overflow: auto;
+  max-height: 275px;
 }

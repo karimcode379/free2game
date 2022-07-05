@@ -7,17 +7,19 @@ import Header from '../components/Header';
 const All = () => {
 
     const [data, setData] = useState([]);
-    const ref = useRef();
+    const [showData, setShowData] = useState(data);
+    const ref = useRef(null);
+    const ref2 = useRef(null);
+    const ref3 = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMenuOpen2, setIsMenuOpen2] = useState(false);
     const [isMenuOpen3, setIsMenuOpen3] = useState(false);
     const location = useLocation();
-    const [showData, setShowData] = useState([]);
+    const [genreCriteria, setGenreCriteria] = useState([]);
+    const [platformCriteria, setPlatformCriteria] = useState([]);
 
     useEffect(() => {
         const checkIfClickedOutside = e => {
-            // If the menu is open and the clicked target is not within the menu,
-            // then close the menu
             if (isMenuOpen && ref.current && !ref.current.contains(e.target)) {
                 setIsMenuOpen(false)
             }
@@ -26,16 +28,13 @@ const All = () => {
         document.addEventListener("mousedown", checkIfClickedOutside)
 
         return () => {
-            // Cleanup the event listener
             document.removeEventListener("mousedown", checkIfClickedOutside)
         }
     }, [isMenuOpen])
 
     useEffect(() => {
         const checkIfClickedOutside = e => {
-            // If the menu is open and the clicked target is not within the menu,
-            // then close the menu
-            if (isMenuOpen2 && ref.current && !ref.current.contains(e.target)) {
+            if (isMenuOpen2 && ref2.current && !ref2.current.contains(e.target)) {
                 setIsMenuOpen2(false)
             }
         }
@@ -43,16 +42,13 @@ const All = () => {
         document.addEventListener("mousedown", checkIfClickedOutside)
 
         return () => {
-            // Cleanup the event listener
             document.removeEventListener("mousedown", checkIfClickedOutside)
         }
     }, [isMenuOpen2])
 
     useEffect(() => {
         const checkIfClickedOutside = e => {
-            // If the menu is open and the clicked target is not within the menu,
-            // then close the menu
-            if (isMenuOpen3 && ref.current && !ref.current.contains(e.target)) {
+            if (isMenuOpen3 && ref3.current && !ref3.current.contains(e.target)) {
                 setIsMenuOpen3(false)
             }
         }
@@ -60,10 +56,26 @@ const All = () => {
         document.addEventListener("mousedown", checkIfClickedOutside)
 
         return () => {
-            // Cleanup the event listener
             document.removeEventListener("mousedown", checkIfClickedOutside)
         }
     }, [isMenuOpen3])
+
+    const sortBy = (e) => {
+        setIsMenuOpen3(false);
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+                'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
+            }
+        };
+        fetch(`https://free-to-play-games-database.p.rapidapi.com/api/games?sort-by=${e.target.value}`, options)
+            .then(response => response.json())
+            .then(json => {
+                (showData[0] ? setShowData : setData)(json);
+            })
+            .catch(err => console.error(err));
+    }
 
     useEffect(() => {
         location.state && setShowData(location.state);
@@ -85,87 +97,80 @@ const All = () => {
         getDataHandler();
     }, [location.state]);
 
-    const sortBy = (e) => {
-        setIsMenuOpen3(false);
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-                'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
-            }
-        };
-        fetch(`https://free-to-play-games-database.p.rapidapi.com/api/games?sort-by=${e.target.value}`, options)
-            .then(response => response.json())
-            .then(json => {
-                (showData[0] ? setShowData : setData)(json);
-            })
-            .catch(err => console.error(err));
+    useEffect(() => {
+        setShowData([])
+        genreCriteria.forEach(criteria => setShowData(arr => [...arr, ...data.filter(elt => elt.genre === criteria)]));
+        platformCriteria.forEach(criteria => setShowData([...showData.filter(elt => elt.platform === criteria)]));
+        // eslint-disable-next-line
+    }, [genreCriteria, platformCriteria, data]);
+
+    const genreFilter = e => {
+        if (genreCriteria.some(elt => elt === e.target.value)) {
+            setGenreCriteria(arr => arr.filter(elt => elt !== e.target.value))
+        } else {
+            setGenreCriteria(arr => [...arr, e.target.value])
+            const criteria = document.createElement("button");
+            criteria.innerHTML = e.target.value;
+            criteria.setAttribute("value", e.target.value);
+            document.querySelector('.activeFilters').appendChild(criteria);
+        }
+        setIsMenuOpen2(false);
     }
 
+    const plattformFilter = e => {
+        if (platformCriteria.some(elt => elt === e.target.value)) {
+            setPlatformCriteria(arr => arr.filter(elt => elt !== e.target.value))
+        } else {
+            setPlatformCriteria(arr => [...arr, e.target.value])
+        }
+        setIsMenuOpen(false);
+    }
+
+    const allPlattforms = () => {
+        setShowData(data.slice())
+        setIsMenuOpen(false);
+    }
 
     const sortAZ = () => {
         setIsMenuOpen(false);
         setShowData((showData[0] ? showData : data).slice().sort((a, b) => a.title.localeCompare(b.title)));
     }
 
-    const genreFilter = (e) => {
-        setIsMenuOpen2(false);
-        setShowData(data.slice().filter(elt => elt.genre === e.target.value))
-    }
-
-    const plattformFilterBrowser = () => {
-        setIsMenuOpen(false);
-        setShowData(data.slice().filter(elt => elt.platform === 'Web Browser'))
-    }
-
-    const plattformFilterWindows = () => {
-        setIsMenuOpen(false);
-        setShowData(data.slice().filter(elt => elt.platform === 'PC (Windows)'))
-    }
-
-    const allPlattforms = () => {
-        setIsMenuOpen(false);
-        setShowData(data.slice())
-    }
-
-
     return (
         <div className="main">
             <Header />
             <div className="mainWrapper">
-                <div>
-                    <div>
-                        <div>
+                <div className="fourGrid filters">
+                    <div className="filterButton" ref={ref}>
+                        <div className="filterTitle">
                             <p>PLATTFORM</p>
                             <div onClick={() => setIsMenuOpen(oldState => !oldState)}>
                                 {!isMenuOpen ? "V" : "Ʌ"}
                             </div>
                         </div>
                         {isMenuOpen && (
-                            <div ref={ref}>
-                                <div>
-                                    <div onClick={allPlattforms}>
-                                        All Plattforms
-                                    </div>
-                                    <div onClick={plattformFilterWindows}>
-                                        Windows (PC)
-                                    </div>
-                                    <div onClick={plattformFilterBrowser}>
-                                        Browser (Web)
-                                    </div>
-                                </div>
+                            <div className="filterList">
+                                <button onClick={allPlattforms}>
+                                    All Plattforms
+                                </button>
+                                <button value="PC (Windows)" onClick={plattformFilter}>
+                                    Windows (PC)
+                                </button>
+                                <button value="Web Browser" onClick={plattformFilter}>
+                                    Browser (Web)
+                                </button>
                             </div>
                         )}
                     </div>
-                    <div>
-                        <div>
+                    <div className="filterButton" ref={ref2}>
+                        <div className="filterTitle">
                             <p>GENRE/TAG</p>
                             <div onClick={() => setIsMenuOpen2(oldState => !oldState)}>
                                 {!isMenuOpen2 ? "V" : "Ʌ"}
                             </div>
                         </div>
                         {isMenuOpen2 && (
-                            <div ref={ref}>
+                            <div className="filterList scrollContainer">
                                 <button value="ARPG" onClick={genreFilter}>
                                     ARPG
                                 </button>
@@ -208,15 +213,15 @@ const All = () => {
                             </div>
                         )}
                     </div>
-                    <div>
-                        <div>
+                    <div className="filterButton" ref={ref3}>
+                        <div className="filterTitle">
                             <p>SORT BY</p>
                             <div onClick={() => setIsMenuOpen3(oldState => !oldState)}>
                                 {!isMenuOpen3 ? "V" : "Ʌ"}
                             </div>
                         </div>
                         {isMenuOpen3 && (
-                            <div ref={ref}>
+                            <div className="filterList">
                                 <button value="relevance" onClick={sortBy}>
                                     Relevance
                                 </button>
@@ -236,6 +241,7 @@ const All = () => {
                         <div></div>
                     </div>
                 </div>
+                <div className="activeFilters"></div>
                 <div className="fourGrid">
                     {(showData[0] ? showData : data).map(elt =>
                         <GameItem

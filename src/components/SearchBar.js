@@ -34,9 +34,7 @@ const SearchBar = () => {
 
     useEffect(() => {
         const checkIfClickedOutside = e => {
-            // If the menu is open and the clicked target is not within the menu,
-            // then close the menu
-            if (isMenuOpen && ref.current && !ref.current.contains(e.target)) {
+            if (ref.current && !ref.current.contains(e.target)) {
                 setIsMenuOpen(false)
             }
         }
@@ -44,7 +42,6 @@ const SearchBar = () => {
         document.addEventListener("mousedown", checkIfClickedOutside)
 
         return () => {
-            // Cleanup the event listener
             document.removeEventListener("mousedown", checkIfClickedOutside)
         }
     }, [isMenuOpen])
@@ -53,6 +50,7 @@ const SearchBar = () => {
         setResult([]);
         setVorschlaege([]);
         const input = e.target.value;
+        console.log(input);
         return data.filter((item) => {
             if (item.title.toLowerCase().includes(input.toLowerCase())) {
                 setResult(result => [...result, item]);
@@ -93,10 +91,14 @@ const SearchBar = () => {
         }
     }
 
+    const clickHandler = (e) => {
+        setIsMenuOpen(oldState => !oldState);
+    }
+
     return (
         <div className="searchBarWrapper">
             <form action="" className="" ref={ref}>
-                <input type="text" name="" id="search" onChange={filterSearch} onKeyDown={keyHandler} onClick={() => setIsMenuOpen(oldState => !oldState)} />
+                <input type="text" name="" id="search" onChange={filterSearch} onKeyDown={keyHandler} onClick={clickHandler} />
                 {isMenuOpen && (<div className="ergebnisVorschlaege" onClick={clearVorschlaege}>{vorschlaege[0] && vorschlaege.map(elt =>
                     <Vorschlaege
                         key={elt.id}

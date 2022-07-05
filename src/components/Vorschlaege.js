@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 const Vorschlaege = (props) => {
-    console.log(props.platform);
     return (
         <div>
             <Link to={`/gamedetail/${props.id}`}>

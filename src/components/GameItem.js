@@ -11,7 +11,7 @@ const GameItem = (props) => {
         <h3>{props.title}</h3>
         <p>{props.short_description}</p>
         <div>
-          <button>
+          <button className="button">
             <Link to={`/gamedetail/${props.id}`}>READ MORE</Link>
           </button>
         </div>
