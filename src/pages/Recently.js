@@ -13,7 +13,7 @@ const Recently = (props) => {
         <div className="main">
             <Header />
             <div className="mainWrapper">
-                <h2></h2>
+                <h2>Recently added free games</h2>
                 <div className="fourGrid">
                     {recentlyEight.map(elt =>
                         <GameItem

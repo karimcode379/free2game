@@ -1,4 +1,4 @@
-import Home_Header from '../img/Home_Header.png';
+// import Home_Header from '../img/Home_Header.png';
 
 const Header = (data) => {
     return (
